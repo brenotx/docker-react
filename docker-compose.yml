@@ -1,0 +1,20 @@
+version: '3'
+services: # Containers.
+  web: # Web container.
+    build: # Build configs.
+      context: . # We have to specify the project folder to execute the build command.
+      dockerfile: Dockerfile.dev # Once we have changed our default Dockerfile name we have to specify a new one.
+    ports: # Port mapping.
+      - 3000:3000 # Maps the port of our current machine to the container application.
+    volumes: # Sharing source code between a development environment on the Docker host and a container.
+      - /app/node_modules # Prevent docker to try find the node_modules in the local machine and use the container one.
+      - .:/app # Create a kind of reference to the local application to the container application.
+  tests:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - /app/node_modules
+      - .:/app
+    command: ["npm", "run", "test"]
+    
